@@ -1,53 +1,40 @@
 import './App.css'
-import { Statistic } from "./Statistics/statistics";
-import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
-import { Notification } from './Notification/Notyfication';
+
 import { useState } from "react";
-import { Section } from './Section/Section';
 
 
-const INITIAL_STATE = {
-  good: 0,
-  neutral: 0,
-  bad: 0,
-};
 
+// const INITIAL_STATE = {
+//   good: 0,
+//   neutral: 0,
+//   bad: 0,
+// };
+let nextId = 0;
 
 export const App = () => {
-    const [data, setData] = useState({ ...INITIAL_STATE});
-    const [isFeedback, setIsFeedback] = useState(false);
+  const [name, setName] = useState('');
+  const [numbers, setNumber] = useState([]);
 
-    const onClick = (evt) => {
-        setData(prevValue => {
-            if(isFeedback===false){setIsFeedback(true)}
-            return { ...prevValue, [evt.target.id]: prevValue[evt.target.id]+1}
-        })
-    }
-
-    const countTotalFeedback = () => {
-        return data.good+ data.neutral+ data.bad;
+    const onClick = () => {
+        setNumber([...numbers,{ id: nextId++, name: name }]);
     }
     
-    const countPositiveFeedbackPercentage = () => {
-        return data.good >0 ? Math.round(data.good/countTotalFeedback() * 100) : 0;
-    }
-
-
+    
   return (
-      <>
-        <div>
-        <Section title="Please leave feedback" children={<FeedbackOptions options={Object.keys(data)} onClick={onClick} />} ></Section>
-        <Section title="Statistics" children={isFeedback === true ?
-            <Statistic
-                  valueBad={data.bad}
-                  valueGood={data.good}
-                  valueNeutral={data.neutral}
-                  valuePositive={countPositiveFeedbackPercentage()}
-                  valueTotal={countTotalFeedback()} />
-            :
-            <Notification message="There is no feedback"></Notification>}>
-        </Section>
-        </div>
-   </>
+          <>
+      <h1>Phonebook</h1>
+          <input
+            type='text'
+            value={name}
+            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+            onChange={e => setName(e.target.value)}
+            required
+      />
+      <button onClick={() => { onClick() }}>Add</button>
+      <ul>
+        {numbers.map(number => (<li key={number.id}>{number.name}</li>))}
+      </ul>
+    </>
   );
 };
