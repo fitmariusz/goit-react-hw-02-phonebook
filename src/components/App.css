@@ -6,3 +6,7 @@ body{
     color: #fff;
     background-color:#000;
 }
+span{
+    color: red;
+    font-style: italic;
+}
