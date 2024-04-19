@@ -1,3 +1,5 @@
+import css from "./Input.module.css"
+
 
 export const Input = ({name, value,type, onChange, pattern}) => {
     return <>
