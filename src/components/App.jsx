@@ -28,6 +28,15 @@ export const App = () => {
     event.preventDefault();
     document.getElementById("nameContact").value = '';
     document.getElementById("numberContact").value = '';
+
+const isExist = contacts.some(
+      contact => contact.name.toLowerCase() === name.trim().toLowerCase()
+    );
+    if (isExist) {
+      alert(`${name} is in contacts`);
+      return;
+    }
+
     setDataPhonebook({
       ...dataPhonebook,
       contacts: [...contacts, { id: nanoid(), name, number, filter }],
