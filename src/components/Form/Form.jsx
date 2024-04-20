@@ -14,5 +14,3 @@ export const Form = ({ dataPhonebook, onSubmit, onChange }) => {
         </>
     )
 };
- 
-// pattern="^[a-zA-Zа-яА-Я]+(([' \\-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
