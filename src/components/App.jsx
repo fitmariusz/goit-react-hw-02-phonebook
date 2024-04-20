@@ -1,50 +1,54 @@
 import './App.css'
-
 import { useState } from "react";
-import { Input } from './Input/Input';
+import { nanoid } from 'nanoid';
+import { ContactList } from './ContactsList/ContactsList';
+import { Form } from './Form/Form';
+import { Section } from './Section/Section';
 
-// import { Input } from "./components/Input"
+const INITCONTACTS = {
+  contacts: [{ id: 0, name: "Mariusz", number: "609205164" },
+  { id: 1, name: "Ania", number: "693504782" },
+  { id: 2, name: "Małgosia", number: "508456235" },
+  { id: 3, name: "Wojtek", number: "605205105" }],
+  filter: '',
+  name: '',
+  number:'',
+}
 
-
-
-// const INITIAL_STATE = {
-//   good: 0,
-//   neutral: 0,
-//   bad: 0,
-// };
-let nextId = 0;
-let contactStart = [{id:0,name:"test", number:"12345"}]
 export const App = () => {
-  const [contacts, setContacts] = useState([]);
-  console.log(contacts)
+  const [dataPhonebook, setDataPhonebook] = useState(INITCONTACTS);
 
   const onChange = (event) => {
-    contactStart.name = event.target.value;
-   };
-
-  const onClick = () => {
-    setContacts([...contacts, {id: nextId++, name: contactStart.name ,number:"12584" }])
+    const { name, value } = event.target;
+    setDataPhonebook({...dataPhonebook,[name]: value })
    };
     
   const onSubmit = (event) => {
+    const { name, number, contacts, filter } = dataPhonebook;
     event.preventDefault();
-   }
+    document.getElementById("nameContact").value = '';
+    document.getElementById("numberContact").value = '';
+    setDataPhonebook({
+      ...dataPhonebook,
+      contacts: [...contacts, { id: nanoid(), name, number, filter }],
+      name: '',
+      number: ''
+    });
+  };
+
+  const onDelete = (contactId) => {
+    setDataPhonebook({
+      ...dataPhonebook,
+      contacts: dataPhonebook.contacts.filter(contact => contact.id !== contactId)
+    });
+  };
     
   return (
     <>
-      <form onSubmit={onSubmit}>
-      <h1>Phonebook</h1>
-      <label>Name
-      <Input type="text" name="name" onChange={onChange} pattern="^[a-zA-Zа-яА-Я]+(([' \\-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"></Input></label> 
-      <label>Number phone
-      <Input type="tel" name="number" onChange={onChange} pattern="\+?\d{1,4}?[ .\\-\\s]?\(?\d{1,3}?\)?[ .\\-\\s]?\d{1,4}[ .\\-\\s]?\d{1,4}[ .\\-\\s]?\d{1,9}"></Input></label>
-        <button onClick={() => { onClick() }}>Add</button>
-         </form>
-      <ul>
-  
-        {contacts.map(contact => <li key={contact.id}>Name: <span>{contact.name}</span> Number: <span>{ contact.number }</span></li>)}
-        </ul>
-       
+      <div className='divForm'> 
+      <Section title="Phonebook" children={<Form dataPhonebook={dataPhonebook} onSubmit={onSubmit} onChange={onChange}></Form>}></Section>
+        <Section title="Contacts" children={<ContactList dataPhonebook={dataPhonebook} onDelete={onDelete} onChange={onChange}></ContactList>}></Section>
+        </div>
     </>
   );
 };
