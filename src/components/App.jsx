@@ -6,10 +6,7 @@ import { Form } from './Form/Form';
 import { Section } from './Section/Section';
 
 const INITCONTACTS = {
-  contacts: [{ id: 0, name: "Mariusz", number: "609205164" },
-  { id: 1, name: "Ania", number: "693504782" },
-  { id: 2, name: "Małgosia", number: "508456235" },
-  { id: 3, name: "Wojtek", number: "605205105" }],
+  contacts: [],
   filter: '',
   name: '',
   number:'',
@@ -24,7 +21,7 @@ export const App = () => {
    };
     
   const onSubmit = (event) => {
-    const { name, number, contacts, filter } = dataPhonebook;
+    const { name, number, contacts} = dataPhonebook;
     event.preventDefault();
     document.getElementById("nameContact").value = '';
     document.getElementById("numberContact").value = '';
@@ -39,7 +36,8 @@ const isExist = contacts.some(
 
     setDataPhonebook({
       ...dataPhonebook,
-      contacts: [...contacts, { id: nanoid(), name, number, filter }],
+      contacts: [...contacts, { id: nanoid(), name, number }],
+      filter:'',
       name: '',
       number: ''
     });
